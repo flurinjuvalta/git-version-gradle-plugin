@@ -79,6 +79,9 @@ class GitVersionPlugin implements Plugin<Project> {
             // create and push a new tag if not
             if (doCreateMissingTag) {
                 def m = version =~ /(\d+)\.(\d+)\.(\d+)(.*)/
+
+                println('create missing tag')
+
                 if (m.matches() && !m[0][4].isEmpty()) {
                     version = m[0][1].toInteger() + "." + m[0][2].toInteger() + "." + (m[0][3].toInteger() + 1)
                     git.createAndPushTag(version)
