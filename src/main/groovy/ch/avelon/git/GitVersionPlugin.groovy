@@ -72,7 +72,7 @@ class GitVersionPlugin implements Plugin<Project> {
 
                 if (m.matches() && !m[0][4].isEmpty()) {
                     version = m[0][1].toInteger() + "." + m[0][2].toInteger() + "." + (m[0][3].toInteger() + 1)
-                    println("'create tag $version")
+                    println("Create tag $version")
                     git.createAndPushTag(version)
                 }
             }
