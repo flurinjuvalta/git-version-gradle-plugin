@@ -1,0 +1,3 @@
+rootProject.name = 'git-version-gradle-plugin'
+
+enableFeaturePreview('STABLE_PUBLISHING')

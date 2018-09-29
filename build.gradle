@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        maven {
+            url = uri("$buildDir/repo")
+        }
+    }
+    dependencies {
+        classpath 'ch.avelon:git-version-gradle-plugin:1.0.0'
+    }
+}
+
+
+plugins {
+    id "com.gradle.plugin-publish" version "0.10.0"
+    id 'java-gradle-plugin'
+    id 'groovy'
+    id 'maven-publish'
+}
+
+apply plugin: 'ch.avelon.git-version-gradle-plugin'
+
+group = 'ch.avelon'
+version = '1.0.0'
+
+gradlePlugin {
+    plugins {
+        gitVersionPlugin {
+            id = 'ch.avelon.git-version-gradle-plugin'
+            implementationClass = 'ch.avelon.git.GitVersionPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'http://www.avelon.ch/'
+    vcsUrl = 'https://github.com/gradle/gradle'
+    description = 'Sets project version based on git tags'
+    tags = ['git', 'version']
+
+    plugins {
+        gitVersionPlugin {
+            // id is captured from java-gradle-plugin configuration
+            displayName = 'Git Version Plugin'
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url = uri("$buildDir/repo")
+        }
+    }
+}
