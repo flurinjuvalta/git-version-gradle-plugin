@@ -32,7 +32,7 @@ gradlePlugin {
 }
 
 pluginBundle {
-    website = 'http://www.avelon.ch/'
+    website = 'https://github.com/flurinjuvalta/git-version-gradle-plugin'
     vcsUrl = 'https://github.com/flurinjuvalta/git-version-gradle-plugin'
     description = 'Sets project version based on git tags'
     tags = ['git', 'version']
