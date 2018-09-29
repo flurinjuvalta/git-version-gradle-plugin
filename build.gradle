@@ -5,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'ch.avelon:git-version-gradle-plugin:1.0.2'
+        classpath 'ch.avelon:git-version-gradle-plugin:1.0.3'
     }
 }
 
@@ -43,6 +43,11 @@ pluginBundle {
             displayName = 'Git Version Plugin'
         }
     }
+}
+
+gitVersion {
+    enabled = true
+    doCreateMissingTag = true
 }
 
 publishing {
