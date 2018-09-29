@@ -11,38 +11,27 @@ class GitVersionPlugin implements Plugin<Project> {
     Git git = new Git()
 
     void apply(Project target) {
-        GitVersionConfiguration config = target.extensions.create('gitVersion', GitVersionConfiguration)
-        if (config.enabled) {
-            if (!git.isInitialized()) {
-                println('Not in a Git reposiitory. Use "git init" to initialize a git repository.')
-            } else if (!git.hasTags()) {
-                println('No git tags found. Use "git tag -a <tagname>" to create your first tag.')
-            } else {
-                try {
-                    target.version = getVersionFromGit(config.doCreateMissingTag)
-                    target.ext {
-                        repository = getRepositoryFromGit()
-                    }
-                } catch (Exception e) {
-                    println 'An Error ocurred while getting the version from git.' + e.toString()
+        if (!git.isInitialized()) {
+            println('Not in a Git reposiitory. Use "git init" to initialize a git repository.')
+        } else if (!git.hasTags()) {
+            println('No git tags found. Use "git tag -a <tagname>" to create your first tag.')
+        } else {
+            try {
+                target.version = getVersionFromGit(target.hasProperty('doCreateMissingTag') && target.doCreateMissingTag)
+                target.ext {
+                    repository = getRepositoryFromGit()
                 }
+            } catch (Exception e) {
+                println 'An Error ocurred while getting the version from git.' + e.toString()
             }
         }
 
         target.task('version').doLast() {
-            if (config.enabled) {
-                println("version = ${project.version}")
-            } else {
-                println('git version plugin is disabled')
-            }
+            println("version = ${project.version}")
         }
 
         target.task('repository').doLast() {
-            if (config.enabled) {
-                println("repository = ${project.repository}")
-            } else {
-                println('git version plugin is disabled')
-            }
+            println("repository = ${project.repository}")
         }
     }
 
@@ -72,7 +61,7 @@ class GitVersionPlugin implements Plugin<Project> {
         }
     }
 
-    String getVersionFromGit(doCreateMissingTag) {
+    String getVersionFromGit(boolean doCreateMissingTag) {
         if (git.onMasterBranch) {
             def version = getVersionName(0)
             // check if version number is a version tag
@@ -80,10 +69,10 @@ class GitVersionPlugin implements Plugin<Project> {
             if (doCreateMissingTag) {
                 def m = version =~ /(\d+)\.(\d+)\.(\d+)(.*)/
 
-                println('create missing tag')
 
                 if (m.matches() && !m[0][4].isEmpty()) {
                     version = m[0][1].toInteger() + "." + m[0][2].toInteger() + "." + (m[0][3].toInteger() + 1)
+                    println("'create tag $version")
                     git.createAndPushTag(version)
                 }
             }
