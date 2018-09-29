@@ -11,26 +11,38 @@ class GitVersionPlugin implements Plugin<Project> {
     Git git = new Git()
 
     void apply(Project target) {
-        if (! git.isInitialized()) {
-            println 'Not in a Git reposiitory. Use "git init" to initialize a git repository.'
-        } else if (! git.hasTags()) {
-            println 'No git tags found. Use "git tag -a <tagname>" to create your first tag.'
-        } else {
-            try {
-                target.version = getVersionFromGit(false)
-                target.ext {
-                    repository = getRepositoryFromGit()
+        GitVersionConfiguration config = project.extensions.create('gitVersion', GitVersionConfiguration)
+        if (config.enabled) {
+            if (!git.isInitialized()) {
+                println('Not in a Git reposiitory. Use "git init" to initialize a git repository.')
+            } else if (!git.hasTags()) {
+                println('No git tags found. Use "git tag -a <tagname>" to create your first tag.')
+            } else {
+                try {
+                    target.version = getVersionFromGit(config.doCreateMissingTag)
+                    target.ext {
+                        repository = getRepositoryFromGit()
+                    }
+                } catch (Exception e) {
+                    println 'An Error ocurred while getting the version from git.' + e.toString()
                 }
-            } catch (Exception e) {
-                println 'An Error ocurred while getting the version from git.' + e.toString()
             }
         }
 
         target.task('version').doLast() {
-            println("version = ${project.version}")
+            if (config.enabled) {
+                println("version = ${project.version}")
+            } else {
+                println('git version plugin is disabled')
+            }
         }
+
         target.task('repository').doLast() {
-            println("repository = ${project.repository}")
+            if (config.enabled) {
+                println("repository = ${project.repository}")
+            } else {
+                println('git version plugin is disabled')
+            }
         }
     }
 
