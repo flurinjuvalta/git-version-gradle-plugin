@@ -14,7 +14,7 @@ class GitVersionPlugin implements Plugin<Project> {
         if (! git.isInitialized()) {
             println 'Not in a Git reposiitory. Use "git init" to initialize a git repository.'
         } else if (! git.hasTags()) {
-            println 'No git tags found. Use "git tag <tagname>" to create your first tag.'
+            println 'No git tags found. Use "git tag -a <tagname>" to create your first tag.'
         } else {
             try {
                 target.version = getVersionFromGit(false)
@@ -69,9 +69,7 @@ class GitVersionPlugin implements Plugin<Project> {
                 def m = version =~ /(\d+)\.(\d+)\.(\d+)(.*)/
                 if (m.matches() && !m[0][4].isEmpty()) {
                     version = m[0][1].toInteger() + "." + m[0][2].toInteger() + "." + (m[0][3].toInteger() + 1)
-
-                    "git tag -a $version -m $version".execute()
-                    "git push --tags".execute()
+                    git.createAndPushTag(version)
                 }
             }
 
@@ -100,13 +98,5 @@ class GitVersionPlugin implements Plugin<Project> {
         } else {
             return "snapshots"
         }
-    }
-
-    String execute(String command) {
-        def sout = new StringBuilder(), serr = new StringBuilder()
-        def proc = command.execute()
-        proc.consumeProcessOutput(sout, serr)
-        proc.waitForOrKill(1000)
-        sout.toString()
     }
 }

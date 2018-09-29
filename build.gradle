@@ -9,7 +9,6 @@ buildscript {
     }
 }
 
-
 plugins {
     id "com.gradle.plugin-publish" version "0.10.0"
     id 'java-gradle-plugin'
@@ -20,7 +19,8 @@ plugins {
 apply plugin: 'ch.avelon.git-version-gradle-plugin'
 
 group = 'ch.avelon'
-version = '1.0.0'
+// version is set by plugin
+// version = '1.0.0'
 
 gradlePlugin {
     plugins {
@@ -33,7 +33,7 @@ gradlePlugin {
 
 pluginBundle {
     website = 'http://www.avelon.ch/'
-    vcsUrl = 'https://github.com/gradle/gradle'
+    vcsUrl = 'https://github.com/flurinjuvalta/git-version-gradle-plugin'
     description = 'Sets project version based on git tags'
     tags = ['git', 'version']
 

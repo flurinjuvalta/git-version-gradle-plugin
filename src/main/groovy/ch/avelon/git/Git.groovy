@@ -32,10 +32,10 @@ class Git {
 
     /**
      * Checks if we are currently on the branch given by the name.
-     * Since Jenkins works in detached HEAD mode, we have to check the branch name like this
+     * Since Jenkins works in detached HEAD mode, we have to check the branch name like this.
      *
-     * @param name The name of the branch (or part of it)
-     * @return true if the current working directory reflects the given branch
+     * @param name The name of the branch (or part of it).
+     * @return true if the current working directory reflects the state of a branch containing the given name.
      */
     boolean isBranch(String name) {
         return execute("git show -s --pretty=%d HEAD").contains(name)
@@ -50,12 +50,12 @@ class Git {
         return !execute("git branch -a --list release*").isEmpty()
     }
 
+    void createAndPushTag(String version) {
+        "git tag -a $version -m $version".execute()
+        "git push --tags".execute()
+    }
 
     String execute(String command) {
-        def sout = new StringBuilder(), serr = new StringBuilder()
-        def proc = command.execute()
-        proc.consumeProcessOutput(sout, serr)
-        proc.waitForOrKill(1000)
-        sout.toString().trim()
+        command.execute().text.trim()
     }
 }
