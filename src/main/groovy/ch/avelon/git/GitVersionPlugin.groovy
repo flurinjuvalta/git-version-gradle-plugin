@@ -11,7 +11,7 @@ class GitVersionPlugin implements Plugin<Project> {
     Git git = new Git()
 
     void apply(Project target) {
-        GitVersionConfiguration config = project.extensions.create('gitVersion', GitVersionConfiguration)
+        GitVersionConfiguration config = target.extensions.create('gitVersion', GitVersionConfiguration)
         if (config.enabled) {
             if (!git.isInitialized()) {
                 println('Not in a Git reposiitory. Use "git init" to initialize a git repository.')

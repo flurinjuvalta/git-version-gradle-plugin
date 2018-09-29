@@ -5,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'ch.avelon:git-version-gradle-plugin:1.0.0'
+        classpath 'ch.avelon:git-version-gradle-plugin:1.0.2'
     }
 }
 
