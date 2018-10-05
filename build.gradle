@@ -1,26 +1,28 @@
+/*
 buildscript {
     repositories {
         maven {
-            url = uri("$buildDir/repo")
+            url 'http://nexus.avelon/nexus/content/repositories/releases'
         }
     }
     dependencies {
-        classpath 'ch.avelon:git-version-gradle-plugin:1.0.4'
+        classpath 'ch.avelon:git-version-gradle-plugin:1.0.0'
     }
 }
+*/
 
 plugins {
     id "com.gradle.plugin-publish" version "0.10.0"
     id 'java-gradle-plugin'
     id 'groovy'
     id 'maven-publish'
+    id "ch.avelon.git-version-gradle-plugin" version "1.0.0"
 }
 
-apply plugin: 'ch.avelon.git-version-gradle-plugin'
+//apply plugin: 'ch.avelon.git-version-gradle-plugin'
 
 group = 'ch.avelon'
-// version is set by plugin
-// version = '1.0.0'
+//version = '1.0.0'
 
 gradlePlugin {
     plugins {
@@ -48,7 +50,11 @@ pluginBundle {
 publishing {
     repositories {
         maven {
-            url = uri("$buildDir/repo")
+            url 'http://nexus.avelon/nexus/content/repositories/releases'
+            credentials {
+                username = 'deployment'
+                password = 'OcQfrbqMcim85g3Tu28b0wuyaj0saQxQx4PvUzCQZMwsljxUMr'
+            }
         }
     }
 }
